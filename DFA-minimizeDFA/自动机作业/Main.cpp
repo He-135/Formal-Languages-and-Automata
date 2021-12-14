@@ -37,9 +37,10 @@ int** DFA_Minimize(int** matrix, int end[], int count, int count_end, vector<int
 bool isEnd(int q, int end[], int count_end);
 int transition(int q, int ch, int** matrix, int count);//返回状态q接收ch后所到达的状态
 void tagRelevance(vector<List*>&v, int q1, int q2, int**tag);
-//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][9]);
+//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][3]);
 
 void save(vector<vector<int>>&result, int q1, int q2);
+void save(vector<vector<int>>& result, int q);
 bool inVec(vector<int>result, int temp);
 int main(void){
 	//int count = 6;//状态个数
@@ -62,6 +63,22 @@ int main(void){
 	//matrix[4][4] = 0;
 	//matrix[5][5] = 2;
 	//int end[] = { 2, 3, 4 };
+
+	//int count = 3;//状态个数
+	//int** matrix = new int* [count];
+	//for (int i = 0; i < count; i++) {
+	//	matrix[i] = new int[count];
+	//	for (int j = 0; j < count; j++) {
+	//		matrix[i][j] = -1;//初始化为-1，-1表示i和j之间无边
+	//	}
+	//}
+	//matrix[0][1] = 0;
+	//matrix[1][2] = 1;
+	//matrix[2][2] = 1;
+	//
+	//int end[] = { 1, 2 };
+	
+
 	int count = 10;//状态个数
 	int** matrix = new int* [count];
 	for (int i = 0; i < count; i++) {
@@ -193,13 +210,13 @@ int** DFA_Minimize(int** matrix, int end[], int count, int count_end, vector<int
 	for (int i = 0; i < count; i++) {
 		tag[i] = new int[count];
 	}
-	//int tag[9][9];
-	////0为可区分，1为不可区分，初始化均为0（0表示未标记）
-	//for(int i = 1; i < count; i++){//每一列从q1开始，每一行从q0开始
-	//	for(int j = 0; j < i; j++){
-	//		tag[i][j] = 0;
-	//	}
-	//}
+	//int tag[3][3];
+	//0为可区分，1为不可区分，初始化均为0（0表示未标记）
+	for(int i = 1; i < count; i++){//每一列从q1开始，每一行从q0开始
+		for(int j = 0; j < i; j++){
+			tag[i][j] = 0;
+		}
+	}
 	//与终止状态有关的状态对一定是不可区分的
 	for(int i = 0; i < count_end; i++){
 		//以下j表示行，k表示列
@@ -266,33 +283,84 @@ int** DFA_Minimize(int** matrix, int end[], int count, int count_end, vector<int
 	}
 	//统计可以合并的状态
 	vector<vector<int>>result;
-	bool* check = new bool[count];
+	int* check = new int[count];
 	for (int i = 0; i < count; i++) {
-		check[i] = false;
+		check[i] = -1;
 	}
 	for (int k = 0; k < count - 1; k++) {
 		for (int j = k + 1; j < count; j++) {
-			if(tag[j][k] == 0){
-				check[j] = true;
-				check[k] = true;
-				save(result, j, k);
+			if (tag[j][k] == 0) {//标记可合并的状态
+				check[j] = k;
+				check[k] = j;
 			}
 		}
 	}
-	if (result.size() == 0) {//无可合并状态
-		cout << "无可合并状态" << endl;
-		countMinimize = count;
-		for (int i = 0; i < count_end; i++) { minimizeEnd.push_back(end[i]); }
-		return matrix;
+	
+	for(int i = 0; i < count; i++){
+		if(check[i] != -1){
+			save(result, check[i], i);
+		}
+		else{
+			save(result, i);
+		}
 	}
 
-	for(int i = 0; i < count; i++){
+	//for (int k = 0; k < count - 1; k++) {
+	//	for (int j = k + 1; j < count; j++) {
+	//		if(tag[j][k] == 0){//状态j和k能合并
+	//			save(result, j, k);
+	//		}
+	//		else if(check[k] || check[j]){//至少其中一个状态被标记为可合并状态
+	//			if(check[k]){
+	//				save(result, k);
+	//			}
+	//			if (check[j]) {
+	//				save(result, j);
+	//			}
+	//		}
+	//		else{//二者均为不可合并状态
+ //       bool in = false;
+	//			for(int m = 0; m < result.size(); m++){//判断状态k是否已存入
+	//				if(inVec(result[m], k)){
+	//					in = true;
+	//					break;
+	//				}
+	//			}
+	//			if(!in){
+	//				vector<int> temp1;
+	//				temp1.push_back(k);
+	//				result.push_back(temp1);
+	//			}
+	//			in = false;
+	//			for (int m = 0; m < result.size(); m++) {//判断状态k是否已存入
+	//				if (inVec(result[m], j)) {
+	//					in = true;
+	//					break;
+	//				}
+	//			}
+	//			if (!in) {
+	//				vector<int> temp2;
+	//				temp2.push_back(j);
+	//				result.push_back(temp2);
+	//			}
+	//		}
+	//	}
+	//}
+
+	//if (result.size() == 0) {//无可合并状态
+	//	cout << "无可合并状态" << endl;
+	//	countMinimize = count;
+	//	for (int i = 0; i < count_end; i++) { minimizeEnd.push_back(end[i]); }
+	//	return matrix;
+	//}
+
+	/*for(int i = 0; i < count; i++){
 		if(!check[i]){
 			vector<int> temp;
 			temp.push_back(i);
 			result.push_back(temp);
 		}
-	}
+	}*/
 	//将不可区分的状态合并后生成最小化DFA
 	countMinimize = result.size();
 	for (int i = 0; i < count_end; i++) {
@@ -351,7 +419,7 @@ int transition(int q, int ch, int** matrix, int count){
 }
 
 void tagRelevance(vector<List*>&v, int q1, int q2, int**tag){
-//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][9]){
+//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][3]){
 	for(int i = 0; i < v.size(); i++){
 		if(v[i]->inList(q1, q2)){//状态q1和q2在状态关联表上
 			List* temp = v[i];
@@ -368,7 +436,6 @@ void tagRelevance(vector<List*>&v, int q1, int q2, int**tag){
 }
 
 void save(vector<vector<int>>&result, int q1, int q2){
-
 	for (int i = 0; i < result.size(); i++) {
 		if (inVec(result[i], q1)) {//判断q1是否已经在vector中
 			if (inVec(result[i], q2)) { return; }
@@ -379,13 +446,13 @@ void save(vector<vector<int>>&result, int q1, int q2){
 			result[i].push_back(q1);
 			return;
 		}
-		for (int j = 0; j < result[i].size(); j++) {
+		/*for (int j = 0; j < result[i].size(); j++) {
 			if (result[i][j] == q1) {
 				for (int k = 0; k < result[i].size(); k++) {
 					if (result[i][k] == q2) { return; }
 				}
 				result[i].push_back(q2);
-					return;
+				return;
 			}
 			else if (result[i][j] == q2) {
 				for (int k = 0; k < result[i].size(); k++) {
@@ -394,15 +461,26 @@ void save(vector<vector<int>>&result, int q1, int q2){
 				result[i].push_back(q1);
 				return;
 			}
-		}
+		}*/
 	}
+	//能运行到此处说明q1和q2都不在vector中
 	vector<int> temp;
 	temp.push_back(q1);
 	temp.push_back(q2);
 	result.push_back(temp);
 }
 
-bool inVec(vector<int>result, int temp){
+void save(vector<vector<int>>& result, int q) {
+	for (int i = 0; i < result.size(); i++) {
+		if (inVec(result[i], q)) {//判断q1是否已经在vector中
+			return;
+		}
+	}
+	vector<int> temp;
+	temp.push_back(q);
+	result.push_back(temp);
+}
+bool inVec(vector<int>result, int temp) {
 	for(int i = 0; i < result.size(); i++){
 		if (result[i] == temp) { return true; }
 	}
