@@ -139,9 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\dfamin.h" />
-    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\ipsl.h" />
-    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\ntd.h" />
+    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\4dfa_mindfa.h" />
+    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\1re_ipslnfa.h" />
+    <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\3nfa_dfa.h" />
+    <ClInclude Include="2ipslnfa_nfa.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\软件\Tencent\QQ\Download\test.cpp" />
