@@ -27,6 +27,9 @@
     <ClInclude Include="2ipslnfa_nfa.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="hh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\软件\Tencent\QQ\Download\test.cpp">

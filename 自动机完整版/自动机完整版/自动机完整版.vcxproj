@@ -143,6 +143,7 @@
     <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\1re_ipslnfa.h" />
     <ClInclude Include="..\..\..\..\软件\Tencent\QQ\Download\3nfa_dfa.h" />
     <ClInclude Include="2ipslnfa_nfa.h" />
+    <ClInclude Include="hh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\软件\Tencent\QQ\Download\test.cpp" />
