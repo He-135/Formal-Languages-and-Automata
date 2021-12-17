@@ -106,6 +106,7 @@ int** DFA_Minimize(int** matrix, int end[], int count, int count_end, vector<int
 	vector<List*>relevance;//存储状态关联表
 	for (int k = 0; k < count - 1; k++) {
 		for (int j = k + 1; j < count; j++) {
+			
 			if (tag[j][k] == 0) {//(qk, qj)未标记
 				int temp1 = transition(j, 0, matrix, count);//获得k,j接收0所到达的状态
 				int temp2 = transition(k, 0, matrix, count);
@@ -234,18 +235,21 @@ int transition(int q, int ch, int** matrix, int count) {
 }
 
 void tagRelevance(vector<List*>& v, int q1, int q2, int** tag) {
-	//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][10]){
+//void tagRelevance(vector<List*>&v, int q1, int q2, int tag[][10]){
+	if (v.empty()) { return; }
 	for (int i = 0; i < v.size(); i++) {
 		if (v[i]->inList(q1, q2)) {//状态q1和q2在状态关联表上
 			List* temp = v[i];
+			v.erase(v.begin() + i);
+			i--;
 			while (temp != NULL) {
 				tag[temp->q1][temp->q2] = 1;
-				/*if (temp->q1 != q1 && temp->q2 != q2) {
+				if (temp->q1 != q1 || temp->q2 != q2) {
 					tagRelevance(v, temp->q1, temp->q2, tag);
-				}*/
+				}
 				temp = temp->next;
 			}
-			v.erase(v.begin() + i);
+			
 		}
 	}
 }
