@@ -81,7 +81,7 @@ int** DFA_Minimize(int** matrix, int end[], int count, int count_end, vector<int
 		tag[i] = new int[count];
 	}
 	//int tag[10][10];
-	//0为可区分，1为不可区分，初始化均为0（0表示未标记）
+	//0为不可区分，1为可区分，初始化均为0（0表示未标记）
 	for (int i = 1; i < count; i++) {//每一列从q1开始，每一行从q0开始
 		for (int j = 0; j < i; j++) {
 			tag[i][j] = 0;
@@ -265,22 +265,6 @@ void save(vector<vector<int>>& result, int q1, int q2) {
 			result[i].push_back(q1);
 			return;
 		}
-		/*for (int j = 0; j < result[i].size(); j++) {
-			if (result[i][j] == q1) {
-				for (int k = 0; k < result[i].size(); k++) {
-					if (result[i][k] == q2) { return; }
-				}
-				result[i].push_back(q2);
-				return;
-			}
-			else if (result[i][j] == q2) {
-				for (int k = 0; k < result[i].size(); k++) {
-					if (result[i][k] == q1) { return; }
-				}
-				result[i].push_back(q1);
-				return;
-			}
-		}*/
 	}
 	//能运行到此处说明q1和q2都不在vector中
 	vector<int> temp;

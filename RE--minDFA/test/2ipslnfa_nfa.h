@@ -17,16 +17,59 @@ public:
 	}
 };
 
-void eclose(int i, int& last, int sizeM, int**& e, int& c) {
+
+typedef struct node
+{
+	int data; struct node* next; int len = 0;
+} node, * Linklist;
+Linklist head, p, q;
+
+void ini(Linklist& l) {
+	l = (Linklist)malloc(sizeof(node));
+	l->data = -1;
+	l->next = NULL;
+	l->len = 1;
+}
+
+status insert(Linklist& l, int e) {
+	l = (Linklist)malloc(sizeof(node));
+	l->data = e;
+	l->next = NULL;
+	l->len = 1; return OK;
+}
+status insert(Linklist& L, int e, int i) {
+	Linklist s, p;
+	int j;
+	p = L; j = 0;
+	while (p && j < i - 1) { p = p->next; ++j; } if (p == NULL || j > i - 1) return ERROR;
+	s = (Linklist)malloc(sizeof(node)); if (!s) return ERROR;
+	s->data = e;
+	s->next = p->next; p->next = s;
+	L->len++; return OK;
+}
+
+queue<int>t1, t2;
+
+void eclose(int i, int& last, int sizeM, int**& e, int& c, Linklist& l) {
 	if (c > sizeM) return;
 	int j = 0;
-
-
-	for (j; (j < sizeM); j++) {
-		if ((last != j) && (e[last][j] == 1)) {
-			e[i][j] = 1;
-
-			eclose(i, j, sizeM, e, ++c);
+	int& p = j;
+	Linklist g; g = l;
+	for (p; (p < sizeM); p++) {
+		if ((last != p) && (e[last][p] == 1)) {
+			int v = 0;
+			while (g->next) {
+				if (g->data == p) {
+					v = 1;
+					break;
+				}
+				g = g->next;
+			}
+			if (!v) {
+				e[i][p] = 1;
+				insert(l, p, l->len);//把一路上经过的所有状态都放进队列里
+				eclose(i, p, sizeM, e, ++c, l);
+			}
 		}
 	}
 
@@ -86,9 +129,11 @@ int** IPSLNFAtoNFA(int** p, nfa& nfa1) {
 	for (i = 0; i < sizeM; i++)
 	{
 		int t = 0;
-		eclose(i, i, sizeM, e, t);
-	}
+		Linklist p;
 
+		insert(p, i);
+		eclose(i, i, sizeM, e, t, p);
+	}
 
 
 

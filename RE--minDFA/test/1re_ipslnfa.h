@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <stdio.h>
 #include <vector>
 #include <stack>
 #include <queue>
@@ -8,7 +9,7 @@
 #include <unordered_map>
 #include <cassert>
 using namespace std;
-
+typedef enum { OK, ERROR }status;
 
 class IPSLNFA {
 public:
@@ -242,7 +243,23 @@ int** NFAtoMatrix() {
 		}
 	}
 	p[0][0] = sizeM;
-
+	cout << endl;
+	cout << "\t";
+	for (int i = 0; i < sizeM; i++) {
+		if (i < 10) { cout << i << "  "; }
+		else if (i >= 10) { cout << i << " "; }
+	}
+	cout << endl;
+	for (int i = 0; i < sizeM; i++) {
+		cout << i << "\t";
+		for (int j = 0; j < sizeM; j++) {
+			if (p[i][j] == 5)
+				cout << "   ";
+			else
+				cout << p[i][j] << "  ";
+		}
+		cout << endl;
+	}
 	return p;
 }
 
